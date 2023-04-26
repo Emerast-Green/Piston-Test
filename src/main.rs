@@ -83,7 +83,7 @@ fn main() {
     app.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
     //app.physics[0].controller.motion[3]=true;
     app.colliders.push(Collider::new((0.0,180.0),(200.0,20.0)));
-    app.colliders.push(Collider::new((60.0,120.0),(50.0,1.0)).set_platform(true));
+    app.colliders.push(Collider::new((60.0,120.0),(50.0,1.0)));
     let mut events = Events::new(EventSettings::new()).max_fps(30);
     while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
@@ -97,18 +97,19 @@ fn main() {
         if let Some(k) = e.button_args() {
             if k.state == ButtonState::Press {
                 match k.button {
-                    Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=true;},
-                    Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=true;},
+                    //Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=true;},
+                    //Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=true;},
                     Button::Keyboard(Key::A) => {app.physics[0].controller.motion[2]=true;},
                     Button::Keyboard(Key::D) => {app.physics[0].controller.motion[3]=true;},
+                    Button::Keyboard(Key::Space) => {app.physics[0].controller.jump=true;},
                     Button::Keyboard(Key::Escape) => {println!("Handled Keyboard(Escape) was pressed!");},
                     _ => {println!("Unhandled {:?} was pressed!",k.button)},
                 }
             }
             if k.state == ButtonState::Release {
                 match k.button {
-                    Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=false;},
-                    Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=false;},
+                    //Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=false;},
+                    //Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=false;},
                     Button::Keyboard(Key::A) => {app.physics[0].controller.motion[2]=false;},
                     Button::Keyboard(Key::D) => {app.physics[0].controller.motion[3]=false;},
                     Button::Keyboard(Key::Escape) => {},

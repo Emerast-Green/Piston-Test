@@ -11,11 +11,21 @@ use std::collections::{HashMap};
 pub struct Controller {
     pub motion: [bool;4],
     pub weight: f64,
+    pub jump: bool,
+    pub jump_weight: f64,
 }
 
 impl Controller {
     pub fn new() -> Controller {
-        Controller{motion:[false,false,false,false],weight:1.0}
+        Controller{motion:[false,false,false,false],weight:1.0,jump:false,jump_weight:5.0}
+    }
+    pub fn set_weight(mut self,v:f64) -> Self {
+        self.weight=v;
+        self
+    }
+    pub fn set_jump_weight(mut self,v:f64) -> Self {
+        self.jump_weight=v;
+        self
     }
     pub fn get_speed_0(&mut self) -> f64 {
         let mut a: f64 = 0.0;
@@ -23,11 +33,13 @@ impl Controller {
         if self.motion[3] {a+=self.weight;}; // right
         a
     }
-    pub fn get_speed_1(&mut self) -> f64 {
+    pub fn get_speed_1(&mut self) -> (f64,i16) {
         let mut a: f64 = 0.0;
+        let mut b = 0;
         if self.motion[0] {a-=self.weight;}; // up
         if self.motion[1] {a+=self.weight;}; // down
-        a
+        if self.jump {a-=self.jump_weight;self.jump=false;b=30};
+        (a,b)
     }
 
 }
@@ -76,16 +88,11 @@ pub trait SimpleDraw {
 pub struct Collider {
     pub pos: (f64,f64),
     pub size: (f64,f64),
-    pub platform: bool,
 }
 
 impl Collider {
     pub fn new(pos:(f64,f64),size:(f64,f64)) -> Collider {
-        Collider{pos:pos,size:size,platform:false}
-    }
-    pub fn set_platform(mut self,v:bool) -> Self {
-        self.platform=v;
-        self
+        Collider{pos:pos,size:size}
     }
     // TODO: FIX ME!
     pub fn collides(&self,physics:&Physics) -> bool {
@@ -108,9 +115,11 @@ pub struct Physics {
     pub size: (f64,f64),
     pub weight: f64,
     pub speed: (f64,f64),
+    pub acc: (f64,f64),
     pub controller: Controller,
     pub has_jumped: bool,
     pub collisions: (bool,bool,bool,bool),
+    pub gravity: i16 // only value 0 allows for gravity to be applied.
 }
 
 pub fn clamp(v:f64,u:f64,d:f64) -> f64 {
@@ -145,18 +154,21 @@ pub fn set_at_index(d:&mut (bool,bool,bool,bool),k:i8,v:bool){
 
 impl Physics {
     pub fn new(pos:(f64,f64),size:(f64,f64),weight:f64) -> Physics {
-        Physics{pos:pos,size:size,weight:weight,speed:(0.0,0.0),controller:Controller::new(),has_jumped:false,collisions:(false,false,false,false)}
+        Physics{pos:pos,size:size,weight:weight,speed:(0.0,0.0),acc:(0.0,0.0),controller:Controller::new(),has_jumped:false,collisions:(false,false,false,false),gravity:0}
     }
     pub fn update(&mut self,colliders:&Vec<Collider>) {
-        if self.collisions.0 {}else{self.speed.1+=0.5};
+        if self.collisions.0 {}else{ if self.gravity==0 { self.speed.1+=0.5 } };
         self.speed.0 += self.controller.get_speed_0();
-        self.speed.1 += self.controller.get_speed_1();
+        let a = self.controller.get_speed_1();
+        self.speed.1 += a.0;
+        self.gravity += a.1;
+        if self.gravity>0 { self.gravity -= 1; };
         self.pos.0 += self.speed.0;
         self.pos.1 += self.speed.1;
-        self.speed.0 = degrade(self.speed.0, 0.125,1.1);
-        self.speed.1 = degrade(self.speed.1, 0.125,1.1);
-        self.speed.0 = clamp(self.speed.0, 5.0, -5.0);
-        self.speed.1 = clamp(self.speed.1, 5.0, -5.0);
+        self.speed.0 = degrade(self.speed.0, 0.0625,0.5);
+        self.speed.1 = degrade(self.speed.1, 0.0625,0.5);
+        //self.speed.0 = clamp(self.speed.0, 10.0, -10.0);
+        //self.speed.1 = clamp(self.speed.1, 10.0, -10.0);
         self.collisions.0=false;self.collisions.1=false;self.collisions.2=false;self.collisions.3=false;
         for i in colliders {
             if i.collides(&self) {
@@ -166,34 +178,25 @@ impl Physics {
         }
     }
     pub fn collision(&mut self,collider:&Collider) -> i8{
-        /*
-        let mut d: HashMap<i8,f64> = HashMap::new();
-        d.insert(0, (self.pos.1+self.size.1-collider.pos.1).abs()); // above
-        d.insert(1, (self.pos.1-collider.size.1-collider.pos.1).abs()); // below
-        d.insert(2, (self.pos.0-collider.size.0-collider.pos.0).abs()); // left
-        d.insert(3, (self.pos.0+self.size.0-collider.pos.0).abs()); // right
-        */
         let mut d: (f64,f64,f64,f64) = (0.0,0.0,0.0,0.0);
         d.0=(self.pos.1+self.size.1-collider.pos.1).abs();
         d.1=(self.pos.1-collider.size.1-collider.pos.1).abs();
         d.2=(self.pos.0-collider.size.0-collider.pos.0).abs();
         d.3=(self.pos.0+self.size.0-collider.pos.0).abs();
         let mut mk = 32;
-        let mut mv = 1000000.0;
-        if d.0<mv {mk=0;mv=d.0}else{};
-        if d.1<mv {mk=1;mv=d.1}else{};
-        if d.2<mv {mk=2;mv=d.2}else{};
-        if d.3<mv {mk=3;mv=d.3}else{};
+        let mut _mv = 1000000.0;
+        if d.0<_mv {mk=0;_mv=d.0}else{};
+        if d.1<_mv {mk=1;_mv=d.1}else{};
+        if d.2<_mv {mk=2;_mv=d.2}else{};
+        if d.3<_mv {mk=3;_mv=d.3}else{};
         match mk {
             0 => { // coming from above
                 self.pos.1=collider.pos.1-self.size.1;
                 if self.speed.1>0.0 { self.speed.1=0.0 }
             },
             1 => { // coming from below
-                if collider.platform {}else{
                 self.pos.1=collider.pos.1+collider.size.1;
                 if self.speed.1<0.0 { self.speed.1=0.0 }
-                }
             },
             2 => { // coming from left
                 self.pos.0=collider.pos.0+collider.size.0;
