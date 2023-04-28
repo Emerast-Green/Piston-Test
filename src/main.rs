@@ -10,9 +10,7 @@ use piston::{ButtonEvent, ButtonState, Key, Button, EventLoop};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
-
-mod stuff;
-use stuff::*;
+use glem::*;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
