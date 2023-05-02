@@ -117,7 +117,7 @@ fn main() {
                     //Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=false;},
                     Button::Keyboard(Key::A) => {app.game.physics[0].controller.motion[2]=false;},
                     Button::Keyboard(Key::D) => {app.game.physics[0].controller.motion[3]=false;},
-                    Button::Keyboard(Key::Space) => {app.game.physics[0].gravity=0;},
+                    Button::Keyboard(Key::Space) => {app.game.physics[0].controller.jump_stop=true;},
                     Button::Keyboard(Key::Escape) => {},
                     _ => {},
                 }
