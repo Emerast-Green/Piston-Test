@@ -74,19 +74,20 @@ fn main() {
         game: Game::new(),
         glyphs: GlyphCache::from_font(get_font(),F, TextureSettings::new()),
     };
+    app.game.load_world(None);
     // VARIABLES
-    app.game.variables.push(30.0); // speed
-    app.game.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
-    //app.physics[0].controller.motion[3]=true;
-    app.game.colliders.push(Collider::new((0.0,window_size[1]-20.0),(window_size[0],20.0))); // floor 
-    app.game.colliders.push(Collider::new((-10.0,0.0),(10.0,window_size[1]))); // left border
-    app.game.colliders.push(Collider::new((window_size[0],0.0),(10.0,window_size[1]))); // right border
-    // platforms 
-    app.game.colliders.extend([
-        Collider::new((60.0,window_size[1]-120.0),(50.0,1.0)),
-        Collider::new((120.0,window_size[1]-60.0),(50.0,1.0)),
-        Collider::new((150.0,window_size[1]-180.0),(100.0,1.0))
-    ],);
+    // app.game.variables.push(30.0); // speed
+    // app.game.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
+    // //app.physics[0].controller.motion[3]=true;
+    // app.game.colliders.push(Collider::new((0.0,window_size[1]-20.0),(window_size[0],20.0))); // floor 
+    // app.game.colliders.push(Collider::new((-10.0,0.0),(10.0,window_size[1]))); // left border
+    // app.game.colliders.push(Collider::new((window_size[0],0.0),(10.0,window_size[1]))); // right border
+    // // platforms 
+    // app.game.colliders.extend([
+    //     Collider::new((60.0,window_size[1]-120.0),(50.0,1.0)),
+    //     Collider::new((120.0,window_size[1]-60.0),(50.0,1.0)),
+    //     Collider::new((150.0,window_size[1]-180.0),(100.0,1.0))
+    // ],);
 
     //
     let mut events = Events::new(EventSettings::new()).max_fps(30);
@@ -108,6 +109,7 @@ fn main() {
                     Button::Keyboard(Key::D) => {app.game.physics[0].controller.motion[3]=true;},
                     Button::Keyboard(Key::Space) => {app.game.physics[0].controller.jump=true;},
                     Button::Keyboard(Key::Escape) => {println!("Handled Keyboard(Escape) was pressed!");},
+                    //Button::Keyboard(Key::H) => {app.game.save_world("/")},
                     _ => {println!("Unhandled {:?} was pressed!",k.button)},
                 }
             }

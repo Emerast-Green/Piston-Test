@@ -1,0 +1,53 @@
+(
+    physics: [
+        (
+            pos: (0.0, 430.0),
+            size: (30.0, 30.0),
+            weight: 20.0,
+            speed: (0.0, 0.0),
+            speedl: 4.0,
+            acc: (0.0, 0.0),
+            accl: 2.0,
+            controller: (
+                motion: (false, false, false, false),
+                weight: 0.6,
+                jump: false,
+                has_jumped: false,
+                jump_weight: 2.5,
+                jump_time: 25,
+                jump_stop: false,
+            ),
+            collisions: (true, false, true, false),
+            gravity: 0,
+        ),
+    ],
+    colliders: [
+        (
+            pos: (0.0, 460.0),
+            size: (640.0, 20.0),
+        ),
+        (
+            pos: (-10.0, 0.0),
+            size: (10.0, 480.0),
+        ),
+        (
+            pos: (640.0, 0.0),
+            size: (10.0, 480.0),
+        ),
+        (
+            pos: (60.0, 360.0),
+            size: (50.0, 1.0),
+        ),
+        (
+            pos: (120.0, 420.0),
+            size: (50.0, 1.0),
+        ),
+        (
+            pos: (150.0, 300.0),
+            size: (100.0, 1.0),
+        ),
+    ],
+    variables: [
+        30.0,
+    ],
+)
