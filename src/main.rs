@@ -61,7 +61,7 @@ fn main() {
 
     // Create a Glutin window.
     let window_size = [640.0,480.0];
-    let mut window: Window = WindowSettings::new("moving-squares", window_size)
+    let mut window: Window = WindowSettings::new("moving-square", window_size)
         .graphics_api(opengl)
         .exit_on_esc(true)
         .build()
@@ -79,9 +79,16 @@ fn main() {
     app.game.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
     //app.physics[0].controller.motion[3]=true;
     app.game.colliders.push(Collider::new((0.0,window_size[1]-20.0),(window_size[0],20.0))); // floor 
-    app.game.colliders.push(Collider::new((60.0,120.0),(50.0,1.0))); // platform
     app.game.colliders.push(Collider::new((-10.0,0.0),(10.0,window_size[1]))); // left border
     app.game.colliders.push(Collider::new((window_size[0],0.0),(10.0,window_size[1]))); // right border
+    // platforms 
+    app.game.colliders.extend([
+        Collider::new((60.0,window_size[1]-120.0),(50.0,1.0)),
+        Collider::new((120.0,window_size[1]-60.0),(50.0,1.0)),
+        Collider::new((150.0,window_size[1]-180.0),(100.0,1.0))
+    ],);
+
+    //
     let mut events = Events::new(EventSettings::new()).max_fps(30);
     while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
