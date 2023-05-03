@@ -59,7 +59,7 @@ fn main() {
         game: Game::new(),
         glyphs: GlyphCache::from_font(get_font(),F, TextureSettings::new()),
     };
-    app.game.load_world(None);
+    app.game.load_world(None );//Some("./assets/worlds/lvl2.ron".to_string()));
     // VARIABLES
     // app.game.variables.push(30.0); // speed
     // app.game.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
@@ -106,6 +106,7 @@ fn main() {
                     Button::Keyboard(Key::D) => {app.game.physics[0].controller.motion[3]=false;},
                     Button::Keyboard(Key::Space) => {app.game.physics[0].controller.jump_stop=true;},
                     Button::Keyboard(Key::Escape) => {},
+                    Button::Keyboard(Key::R) => { app.game.load_world(Some((*app.game.last_target).to_string())); }
                     _ => {},
                 }
             }

@@ -2,7 +2,7 @@
     last_target: "",
     physics: [
         (
-            pos: (0.0, 430.0),
+            pos: (610.0, 430.0),
             size: (30.0, 30.0),
             weight: 20.0,
             speed: (0.0, 0.0),
@@ -37,25 +37,53 @@
             size: (10.0, 480.0),
         ),
         (
-            pos: (60.0, 360.0), // first platform
-            size: (50.0, 1.0),
+            pos: (400.0, 160.0), // barrier 2/3
+            size: (50.0, 320.0),
         ),
         (
-            pos: (120.0, 420.0), // second platform
-            size: (50.0, 1.0),
+            pos: (224.0, 400.0), // cutting platform
+            size: (300.0, 1.0),
         ),
         (
-            pos: (150.0, 300.0), // third platform
+            pos: (540.0, 340.0), // second platform
             size: (100.0, 1.0),
         ),
         (
-            pos: (360.0, 250.0), // fourth platform
-            size: (75.0, 1.0),
+            pos: (590.0, 280.0), // third platform
+            size: (50.0, 1.0),
         ),
         (
-            pos:(601.0,381.0), // door block
-            size:(39.0,79.0),
-        )
+            pos: (424.0, 220.0), // fourth platform
+            size: (50.0, 1.0),
+        ),
+        (
+            pos: (100.0, 160.0), // fifth platform
+            size: (150.0, 1.0),
+        ),
+        (
+            pos: (150.0, 0.0), // second barrier
+            size: (1.0, 160.0),
+        ),
+        (
+            pos: (150.0, 300.0), // sixth platform
+            size: (100.0, 1.0),
+        ),
+        (
+            pos:(1.0,1.0), // door block
+            size:(38.0,78.0),
+        ),
+        (
+            pos: (150.0, 360.0), // below sixth platform
+            size: (50.0, 1.0),
+        ),
+        (
+            pos: (150.0, 240.0), // above sixth platform
+            size: (50.0, 1.0),
+        ),
+        (
+            pos: (50.0, 220.0), // seventh platform
+            size: (50.0, 1.0),
+        ),
     ],
     variables: [
         30.0,
@@ -70,28 +98,28 @@
             active: true,
         ),
         (
-            pos:(130.0,380.0), // ground
+            pos:(190.0,130.0), // below 
             size:(20.0,20.0),
             variable: 1,
             change: 1.0,
             active: true,
         ),
         (
-            pos:(300.0,230.0), // leap 3-4
+            pos:(415.0,50.0), // top of barrier
             size:(20.0,20.0),
             variable: 1,
             change: 1.0,
             active: true,
         ),
         (
-            pos:(400.0,430.0), // ground
+            pos:(300.0,430.0), // ground
             size:(20.0,20.0),
             variable: 1,
             change: 1.0,
             active: true,
         ),
         (
-            pos:(610.0,340.0), // above door
+            pos:(480.0,370.0), // first
             size:(20.0,20.0),
             variable: 1,
             change: 1.0,
@@ -100,9 +128,9 @@
     ],
     doors: [
         (
-            pos:(600.0,380.0),
+            pos:(0.0,0.0),
             size:(40.0,80.0),
-            target:"./assets/worlds/lvl2.ron",
+            target:"./assets/worlds/lvl3.ron",
             req_variable:Some(1),
             req_value:5.0,
             instant:true,
