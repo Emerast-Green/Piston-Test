@@ -1,3 +1,5 @@
+//#![windows_subsystem = "windows"]
+
 extern crate glutin_window;
 extern crate graphics;
 extern crate opengl_graphics;
@@ -29,29 +31,12 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             clear(BLACK, gl);
-            for i in &self.game.colliders {
-                i.draw(c,gl);
-            }
-            for i in &self.game.physics {
-                i.draw(c,gl);
-            }
-            let transform = c
-            .transform
-            .trans(10.0,10.0);
-            Text{color:[1.0,1.0,0.0,1.0],font_size:16,round:false}.draw(
-                self.game.colliders[0].collides(&self.game.physics[0]).to_string().as_str(), 
-                &mut self.glyphs, 
-                &c.draw_state, 
-                transform, 
-                gl).expect("Can't even write some letters...")
+            self.game.draw(c,gl,&mut self.glyphs);
         });
     }
 
     fn update(&mut self, _args: &UpdateArgs) {
-        for i in &mut self.game.physics {
-            i.update(&self.game.colliders);
-        }
-
+        self.game.update();
     }
 }
 
