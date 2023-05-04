@@ -5,6 +5,7 @@
                 widgets: [],
                 active: false,
             ),
+            start_target: "./assets/worlds/default.ron",
             game: Some((
                 physics: [
                 ],
@@ -16,7 +17,7 @@
                 ],
                 variables: [
                 ],
-                last_target: "./assets/worlds/default.ron",
+                last_target:  "./assets/worlds/default.ron",
             )),
         ),
     ],

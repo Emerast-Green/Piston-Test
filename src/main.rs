@@ -72,7 +72,7 @@ fn main() {
     app.game.load_config(None);
     let game = &mut app.game.windows[app.game.c_window].game;
     let game = (game.as_mut()).expect("Just made it...");
-    game.load_world(Some("last".to_string()));
+    game.load_world(None);
     // app.game.windows.push(glem::Window::new());
     // app.game.windows[app.game.c_window].game = Some(glem::Game::new());
     // let game = &mut app.game.windows[app.game.c_window].game;
