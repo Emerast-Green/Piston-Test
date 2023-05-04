@@ -1,0 +1,24 @@
+(
+    windows: [
+        (
+            menu: (
+                widgets: [],
+                active: false,
+            ),
+            game: Some((
+                physics: [
+                ],
+                colliders: [
+                ],
+                actors: [
+                ],
+                doors: [
+                ],
+                variables: [
+                ],
+                last_target: "./assets/worlds/default.ron",
+            )),
+        ),
+    ],
+    c_window: 0,
+)

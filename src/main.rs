@@ -13,11 +13,11 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
 
-use glem::*;
+use glem;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
-    game: Game,
+    game: glem::Main,
     glyphs: GlyphCache<'static>,
 }
 
@@ -31,12 +31,20 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             clear(BLACK, gl);
-            self.game.draw(c,gl,&mut self.glyphs);
+            if self.game.windows.len()>0 {
+                self.game.windows[self.game.c_window].draw(c, gl, &mut self.glyphs)
+            }else{
+                panic!("Can't proceed without any windows!")
+            }
         });
     }
 
     fn update(&mut self, _args: &UpdateArgs) {
-        self.game.update();
+        if self.game.windows.len()>0 {
+            self.game.windows[self.game.c_window].update()
+        }else{
+            panic!("Can't proceed without any windows!")
+        }
     }
 }
 
@@ -56,10 +64,20 @@ fn main() {
     const F: () = ();
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        game: Game::new(),
-        glyphs: GlyphCache::from_font(get_font(),F, TextureSettings::new()),
+        game: glem::Main::new(),
+        glyphs: GlyphCache::from_font(glem::get_font(),F, TextureSettings::new()),
     };
-    app.game.load_world(None );//Some("./assets/worlds/lvl2.ron".to_string()));
+    app.game.load_config(None);
+    let game = &mut app.game.windows[app.game.c_window].game;
+    let game = (game.as_mut()).expect("Just made it...");
+    game.load_world(Some("last".to_string()));
+    // app.game.windows.push(glem::Window::new());
+    // app.game.windows[app.game.c_window].game = Some(glem::Game::new());
+    // let game = &mut app.game.windows[app.game.c_window].game;
+    // let game = (game.as_mut()).expect("Just made it...");
+    // game.last_target = "./assets/worlds/default.ron".to_string();
+    // game.load_world(Some("last".to_string()));
+    // app.game.save_config("./assets/config.ron".to_string());
     // VARIABLES
     // app.game.variables.push(30.0); // speed
     // app.game.physics.push(Physics::new((0.0,0.0),(30.0,30.0),20.0));
@@ -86,30 +104,7 @@ fn main() {
         }
 
         if let Some(k) = e.button_args() {
-            if k.state == ButtonState::Press {
-                match k.button {
-                    //Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=true;},
-                    //Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=true;},
-                    Button::Keyboard(Key::A) => {app.game.physics[0].controller.motion[2]=true;},
-                    Button::Keyboard(Key::D) => {app.game.physics[0].controller.motion[3]=true;},
-                    Button::Keyboard(Key::Space) => {app.game.physics[0].controller.jump=true;},
-                    Button::Keyboard(Key::Escape) => {println!("Handled Keyboard(Escape) was pressed!");},
-                    //Button::Keyboard(Key::H) => {app.game.save_world("/")},
-                    _ => {println!("Unhandled {:?} was pressed!",k.button)},
-                }
-            }
-            if k.state == ButtonState::Release {
-                match k.button {
-                    //Button::Keyboard(Key::W) => {app.physics[0].controller.motion[0]=false;},
-                    //Button::Keyboard(Key::S) => {app.physics[0].controller.motion[1]=false;},
-                    Button::Keyboard(Key::A) => {app.game.physics[0].controller.motion[2]=false;},
-                    Button::Keyboard(Key::D) => {app.game.physics[0].controller.motion[3]=false;},
-                    Button::Keyboard(Key::Space) => {app.game.physics[0].controller.jump_stop=true;},
-                    Button::Keyboard(Key::Escape) => {},
-                    Button::Keyboard(Key::R) => { app.game.load_world(Some((*app.game.last_target).to_string())); }
-                    _ => {},
-                }
-            }
+            app.game.parse_button(k);
         }
     }
 }
