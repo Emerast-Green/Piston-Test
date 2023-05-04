@@ -8,7 +8,7 @@ extern crate piston;
 use glutin_window::GlutinWindow as Window;
 
 use opengl_graphics::{GlGraphics, OpenGL, GlyphCache, TextureSettings};
-use piston::{ButtonEvent, ButtonState, Key, Button, EventLoop};
+use piston::{ButtonEvent, ButtonState, Button, EventLoop, MouseButton, MouseCursorEvent};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
@@ -19,6 +19,7 @@ pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
     game: glem::Main,
     glyphs: GlyphCache<'static>,
+    last_mouse_pos: [f64;2],
 }
 
 
@@ -66,6 +67,7 @@ fn main() {
         gl: GlGraphics::new(opengl),
         game: glem::Main::new(),
         glyphs: GlyphCache::from_font(glem::get_font(),F, TextureSettings::new()),
+        last_mouse_pos: [0.0;2],
     };
     app.game.load_config(None);
     let game = &mut app.game.windows[app.game.c_window].game;
@@ -102,9 +104,19 @@ fn main() {
         if let Some(args) = e.update_args() {
             app.update(&args);
         }
-
+        if let Some(m) = e.mouse_cursor_args() {
+            app.last_mouse_pos = m;
+        }
         if let Some(k) = e.button_args() {
             app.game.parse_button(k);
+            if k.state == ButtonState::Press {
+                match k.button {
+                    Button::Mouse(MouseButton::Left) => { println!("Handled Mouse(Left) at {:?}",app.last_mouse_pos) },
+                    Button::Mouse(MouseButton::Right) => { println!("Handled Mouse(Right) at {:?}",app.last_mouse_pos) },
+                    _ => {},
+                }
+            }
         }
+
     }
 }
