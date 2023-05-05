@@ -5,12 +5,10 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
 
-use std::collections::HashMap;
-
 use glutin_window::GlutinWindow as Window;
 
 use opengl_graphics::{GlGraphics, OpenGL, GlyphCache, TextureSettings};
-use piston::{ButtonEvent, ButtonState, Button, EventLoop, MouseButton, MouseCursorEvent};
+use piston::{ButtonEvent, EventLoop, MouseCursorEvent};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
@@ -43,11 +41,7 @@ impl App {
     }
 
     fn update(&mut self, _args: &UpdateArgs) {
-        if self.game.windows.len()>0 {
-            self.game.windows[self.game.c_window].update()
-        }else{
-            panic!("Can't proceed without any windows!")
-        }
+        self.game.update();
     }
 }
 
@@ -72,9 +66,9 @@ fn main() {
         last_mouse_pos: [0.0;2],
     };
     app.game.load_config(None);
-    let game = &mut app.game.windows[app.game.c_window].game;
-    let game = (game.as_mut()).expect("Just made it...");
-    game.load_world(None);
+    //let game = &mut app.game.windows[app.game.c_window].game;
+    //let game = (game.as_mut()).expect("Just made it...");
+    //game.load_world(None);
     // app.game.windows.push(glem::Window::new());
     // app.game.windows[app.game.c_window].game = Some(glem::Game::new());
     // let game = &mut app.game.windows[app.game.c_window].game;
@@ -110,14 +104,7 @@ fn main() {
             app.last_mouse_pos = m;
         }
         if let Some(k) = e.button_args() {
-            app.game.parse_button(k);
-            if k.state == ButtonState::Press {
-                match k.button {
-                    Button::Mouse(MouseButton::Left) => { println!("Handled Mouse(Left) at {:?}",app.last_mouse_pos) },
-                    Button::Mouse(MouseButton::Right) => { println!("Handled Mouse(Right) at {:?}",app.last_mouse_pos) },
-                    _ => {},
-                }
-            }
+            app.game.parse_button(k,app.last_mouse_pos);
         }
 
     }
