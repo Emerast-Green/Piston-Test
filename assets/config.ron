@@ -15,8 +15,8 @@
                 ],
                 doors: [
                 ],
-                variables: [
-                ],
+                variables: {
+                },
                 last_target:  "./assets/worlds/default.ron",
             )),
         ),

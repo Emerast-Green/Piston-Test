@@ -5,6 +5,8 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
 
+use std::collections::HashMap;
+
 use glutin_window::GlutinWindow as Window;
 
 use opengl_graphics::{GlGraphics, OpenGL, GlyphCache, TextureSettings};
