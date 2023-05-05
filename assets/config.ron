@@ -2,6 +2,23 @@
     windows: [
         (
             menu: (
+                widgets: [
+                    (
+                        pos: (0.0,0.0),
+                        size: (150.0,50.0),
+                        text: "test",
+                        is_button: true,
+                        variable: Some(1),
+                        change: 0.0,
+                    )
+                ],
+                active: true,
+            ),
+            start_target: "",
+            game: None,
+        ),
+        (
+            menu: (
                 widgets: [],
                 active: false,
             ),
