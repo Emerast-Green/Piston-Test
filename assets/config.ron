@@ -15,6 +15,7 @@
                 active: true,
             ),
             start_target: "",
+            blackout_time: 1.0,
             game: None,
         ),
         (
@@ -23,6 +24,7 @@
                 active: false,
             ),
             start_target: "./assets/worlds/default.ron",
+            blackout_time: 3.0,
             game: Some((
                 physics: [
                 ],
