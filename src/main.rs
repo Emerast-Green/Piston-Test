@@ -8,7 +8,7 @@ extern crate piston;
 use glutin_window::GlutinWindow as Window;
 
 use opengl_graphics::{GlGraphics, OpenGL, GlyphCache, TextureSettings};
-use piston::{ButtonEvent, EventLoop, MouseCursorEvent};
+use piston::{ButtonEvent, EventLoop, MouseCursorEvent, AdvancedWindow};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
@@ -53,7 +53,7 @@ fn main() {
     let window_size = [640.0,480.0];
     let mut window: Window = WindowSettings::new("moving-square", window_size)
         .graphics_api(opengl)
-        .exit_on_esc(true)
+        .exit_on_esc(false)
         .build()
         .unwrap();
 
@@ -106,6 +106,8 @@ fn main() {
         if let Some(k) = e.button_args() {
             app.game.parse_button(k,app.last_mouse_pos);
         }
-
+        if app.game.run == false { 
+            break;
+        }
     }
 }

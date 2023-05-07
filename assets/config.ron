@@ -4,12 +4,20 @@
             menu: (
                 widgets: [
                     (
-                        pos: (0.0,0.0),
+                        pos: (245.0,150.0),
                         size: (150.0,50.0),
-                        text: "test",
+                        text: "PLAY",
                         is_button: true,
                         variable: Some(1),
-                        change: 0.0,
+                        change: Some(1),
+                    ),
+                    (
+                        pos: (245.0,220.0),
+                        size: (150.0,50.0),
+                        text: "EXIT",
+                        is_button: true,
+                        variable: Some(2),
+                        change: Some(0),
                     )
                 ],
                 active: true,
