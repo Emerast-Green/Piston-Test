@@ -1,3 +1,6 @@
 /target
 piston_test.exe
 game.rar
+game_lin.tar
+.gitignore
+piston_test
